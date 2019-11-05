@@ -1,12 +1,12 @@
 <template>
   <div class="courses">
-    <loader v-if="showLoader" />
     <Course v-for="course in courses"
     :key="course.id"
     :id="course.id"
     :name="course.name"
     :author_name="course.author.display_name"
     />
+    <loader v-if="showLoader" />
   <input @keyup.enter="addCourse" v-model="newCourse" placeholder="add course..." class="courses__add-course-input">
   <hr>
   </div>
