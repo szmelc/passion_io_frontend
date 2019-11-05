@@ -10,20 +10,24 @@
       :name="vertical.name"
       :categories="vertical.categories"
       />
+      <Loader v-if="showLoader" />
     </div>
   </div>
 </template>
 
 <script>
+import Loader from './Loader'
 import VerticalContainer from './VerticalContainer'
 
 export default {
   name: 'Homepage',
   components: {
+    Loader,
     VerticalContainer
   },
   data () {
     return {
+      showLoader: false,
       verticals: null
     }
   },
@@ -32,12 +36,14 @@ export default {
   },
   methods: {
     fetchVerticals () {
+      this.showLoader = true
       this.$http.get('/verticals')
         .then(response => this.assignVerticals(response))
         .catch(() => this.logout())
     },
 
     assignVerticals (response) {
+      this.showLoader = false
       this.verticals = response.data
     },
 
