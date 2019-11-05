@@ -1,5 +1,6 @@
 <template>
   <div class="courses">
+    <loader v-if="showLoader" />
     <Course v-for="course in courses"
     :key="course.id"
     :id="course.id"
@@ -13,17 +14,20 @@
 
 <script>
 import Course from './Course'
+import Loader from './Loader'
 
 export default {
   name: 'Courses',
   components: {
-    Course
+    Course,
+    Loader
   },
   props: ['id', 'category_id'],
   data () {
     return {
       courses: null,
-      newCourse: null
+      newCourse: null,
+      showLoader: false
     }
   },
   created () {
@@ -34,6 +38,7 @@ export default {
   },
   methods: {
     fetchCourses () {
+      this.showLoader = true
       this.$http.get('/courses', { params: { category_id: this.category_id } })
         .then(res => this.assignCourses(res))
         .catch(res => console.log(res))
@@ -41,6 +46,7 @@ export default {
 
     assignCourses (response) {
       this.courses = response.data
+      this.showLoader = false
     },
 
     addCourse () {

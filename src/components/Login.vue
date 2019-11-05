@@ -8,18 +8,25 @@
       <label for="inputPassword" class="sr-only">Password</label>
       <input v-model="password" type="password" id="inputPassword" class="form-control" placeholder="Password" required>
       <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+      <Loader v-if="signing_in" />
     </form>
   </div>
 </template>
 
 <script>
+import Loader from './Loader'
+
 export default {
   name: 'Login',
+  components: {
+    Loader
+  },
   data () {
     return {
       email: '',
       password: '',
-      error: false
+      error: false,
+      signing_in: false
     }
   },
   created () {
@@ -35,12 +42,14 @@ export default {
       }
     },
     login () {
-      this.$http.post('http://localhost:3000/oauth/token', { email: this.email, password: this.password, grant_type: 'password' })
+      this.signing_in = true
+      this.$http.post('https://evening-stream-34331.herokuapp.com/oauth/token', { email: this.email, password: this.password, grant_type: 'password' })
         .then(request => this.loginSuccessful(request))
         .catch(() => this.loginFailed())
     },
 
     loginSuccessful (req) {
+      this.signing_in = false
       if (!req.data.access_token) {
         this.loginFailed()
         return
@@ -53,6 +62,7 @@ export default {
     },
 
     loginFailed () {
+      this.signing_in = false
       this.error = 'Login failed!'
       delete localStorage.token
     }
