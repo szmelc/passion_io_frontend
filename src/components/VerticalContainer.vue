@@ -24,12 +24,16 @@ export default {
   components: {
     CategoryContainer
   },
-  props: ['id', 'name'],
+  props: ['id', 'categories','name'],
   data () {
     return {
-      categories: null,
       newCategory: null
     }
+  },
+  created () {
+    this.$on('RemoveCategory', () => {
+      this.fetchCategories()
+    })
   },
   beforeMount () {
     this.fetchCategories()
@@ -45,10 +49,18 @@ export default {
       this.categories = response.data
     },
 
+    displayError (response) {
+      for (var error in response['response']['data']['errors']) {
+        if (response['response']['data']['errors'].hasOwnProperty(error)) {
+          alert(error + ' ' + response['response']['data']['errors'][error])
+        }
+      }
+    },
+
     addCategory () {
       this.$http.post('/categories', { vertical_id: this.id, state: 1, name: this.newCategory })
         .then(res => this.fetchCategories())
-        .catch(req => alert('Something went wrong'))
+        .catch(res => this.displayError(res))
       document.querySelector('.vertical__add-category-input').value = ''
     }
   }

@@ -1,10 +1,16 @@
 <template>
-  <div class="main">
-    <VerticalContainer v-for="vertical in verticals"
-    :key="vertical.id"
-    :id="vertical.id"
-    :name="vertical.name"
-    />
+  <div class="main container">
+    <div class="nav row">
+      <a class="logout-link" href="#" @click="logout">Logout</a>
+    </div>
+    <div class="content-wrapper">
+      <VerticalContainer v-for="vertical in verticals"
+      :key="vertical.id"
+      :id="vertical.id"
+      :name="vertical.name"
+      :categories="vertical.categories"
+      />
+    </div>
   </div>
 </template>
 
@@ -28,21 +34,42 @@ export default {
     fetchVerticals () {
       this.$http.get('/verticals')
         .then(response => this.assignVerticals(response))
+        .catch(() => this.logout())
     },
 
     assignVerticals (response) {
+      debugger
       this.verticals = response.data
+    },
+
+    logout (e) {
+      e.preventDefault()
+      delete localStorage.token
+      this.$router.replace(this.$route.query.redirect || '/')
     }
   }
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .main {
   display: flex;
   justify-content: center;
+  flex-direction: column;
 }
+
+.content-wrapper {
+  padding-top: 40px;
+  display: flex;
+  justify-content: center;
+}
+
+.logout-link {
+  top: 5px;
+  right: 50px;
+  position: absolute;
+}
+
 h1, h2 {
   font-weight: normal;
 }
