@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <div class="container">
+    <div class="container col-xs-12">
       <router-view></router-view>
     </div>
   </div>
@@ -13,4 +13,8 @@ export default {
 </script>
 
 <style>
+  .container {
+    margin: 0;
+    max-width: 100%;
+  }
 </style>

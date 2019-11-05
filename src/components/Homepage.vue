@@ -1,15 +1,37 @@
 <template>
   <div class="main">
-
+    <VerticalContainer v-for="vertical in verticals"
+    :key="vertical.id"
+    :id="vertical.id"
+    :name="vertical.name"
+    />
   </div>
 </template>
 
 <script>
+import VerticalContainer from './VerticalContainer'
+
 export default {
-  name: 'Hineoage',
+  name: 'Homepage',
+  components: {
+    VerticalContainer
+  },
   data () {
     return {
-      msg: 'Welcome to Your Vue.js App'
+      verticals: null
+    }
+  },
+  mounted () {
+    this.fetchVerticals()
+  },
+  methods: {
+    fetchVerticals () {
+      this.$http.get('/verticals')
+        .then(response => this.assignVerticals(response))
+    },
+
+    assignVerticals (response) {
+      this.verticals = response.data
     }
   }
 }
@@ -17,6 +39,10 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.main {
+  display: flex;
+  justify-content: center;
+}
 h1, h2 {
   font-weight: normal;
 }

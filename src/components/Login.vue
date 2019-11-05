@@ -2,6 +2,7 @@
   <div class="login-wrapper border border-light">
     <form class="form-signin" @submit.prevent="login">
       <h2 class="form-signin-heading">Please sign in</h2>
+      <div class="alert alert-danger" v-if="error">{{ error }}</div>
       <label for="inputEmail" class="sr-only">Email address</label>
       <input v-model="email" type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
       <label for="inputPassword" class="sr-only">Password</label>
@@ -17,25 +18,51 @@ export default {
   data () {
     return {
       email: '',
-      password: ''
+      password: '',
+      error: false
     }
   },
+  created () {
+    this.checkCurrentLogin()
+  },
+  updated () {
+    this.checkCurrentLogin()
+  },
   methods: {
+    checkCurrentLogin () {
+      if (localStorage.token) {
+        this.$router.replace(this.$route.query.redirect || '/home')
+      }
+    },
     login () {
-      console.log(this.email)
-      console.log(this.password)
+      this.$http.post('http://localhost:3000/oauth/token', { email: this.email, password: this.password, grant_type: 'password' })
+        .then(request => this.loginSuccessful(request))
+        .catch(() => this.loginFailed())
+    },
+
+    loginSuccessful (req) {
+      if (!req.data.access_token) {
+        this.loginFailed()
+        return
+      }
+
+      localStorage.token = req.data.access_token
+      this.error = false
+      this.$router.replace(this.$route.query.redirect || '/home')
+    },
+
+    loginFailed () {
+      this.error = 'Login failed!'
+      delete localStorage.token
     }
   }
 }
 </script>
 
 <style lang="css">
-body {
-  background: #605B56;
-}
 
 .login-wrapper {
-  background: #fff;
+  background: #f3f3f3;
   width: 70%;
   margin: 12% auto;
 }
