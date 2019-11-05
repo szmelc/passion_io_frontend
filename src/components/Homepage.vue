@@ -38,12 +38,10 @@ export default {
     },
 
     assignVerticals (response) {
-      debugger
       this.verticals = response.data
     },
 
-    logout (e) {
-      e.preventDefault()
+    logout () {
       delete localStorage.token
       this.$router.replace(this.$route.query.redirect || '/')
     }

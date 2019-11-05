@@ -41,7 +41,7 @@ export default {
     displayError (response) {
       for (var error in response['response']['data']['errors']) {
         if (response['response']['data']['errors'].hasOwnProperty(error)) {
-          alert(error + ' ' + response['response']['data']['errors'][error]);
+          alert(error + ' ' + response['response']['data']['errors'][error])
         }
       }
     }

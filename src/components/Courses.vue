@@ -4,9 +4,8 @@
     :key="course.id"
     :id="course.id"
     :name="course.name"
-    :author_id="course.author_id"
+    :author_name="course.author.display_name"
     />
-  <span v-if="courses.length == 0">No courses...</span>
   <input @keyup.enter="addCourse" v-model="newCourse" placeholder="add course..." class="courses__add-course-input">
   <hr>
   </div>
@@ -42,7 +41,6 @@ export default {
 
     assignCourses (response) {
       this.courses = response.data
-      console.log(this.courses)
     },
 
     addCourse () {
@@ -55,7 +53,7 @@ export default {
     displayError (response) {
       for (var error in response['response']['data']['errors']) {
         if (response['response']['data']['errors'].hasOwnProperty(error)) {
-          alert(error + ' ' + response['response']['data']['errors'][error]);
+          alert(error + ' ' + response['response']['data']['errors'][error])
         }
       }
     }

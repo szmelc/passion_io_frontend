@@ -24,7 +24,7 @@ export default {
   components: {
     CategoryContainer
   },
-  props: ['id', 'categories','name'],
+  props: ['id', 'categories', 'name'],
   data () {
     return {
       newCategory: null
