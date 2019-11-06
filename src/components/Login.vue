@@ -26,7 +26,7 @@ export default {
       email: '',
       password: '',
       error: false,
-      showloader: false
+      showLoader: false
     }
   },
   created () {
