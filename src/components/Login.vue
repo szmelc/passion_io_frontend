@@ -43,7 +43,7 @@ export default {
     },
     login () {
       this.showLoader = true
-      this.$http.post('http://passion-io-app.s3-website.eu-central-1.amazonaws.com/oauth/token', { email: this.email, password: this.password, grant_type: 'password' })
+      this.$http.post('http://localhost:3000/oauth/token', { email: this.email, password: this.password, grant_type: 'password' })
         .then(request => this.loginSuccessful(request))
         .catch(() => this.loginFailed())
     },
